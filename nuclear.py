@@ -148,10 +148,10 @@ def display_map(df):
         folium.CircleMarker(
             location=[row['Location.Cordinates.Latitude'], row['Location.Cordinates.Longitude']],
             radius=5,  # Adjust size of the circle
-            color='blue',  # Circle border color
+            color='blue',
             fill=True,
             fill_color='blue',  # Circle fill color
-            fill_opacity=0.7,  # Opacity of the fill
+            fill_opacity=0.7,
             popup=f"Test: {row['Data.Name']}<br>Yield: {row['Data.Yeild.Upper']} kt" if not pd.isnull(row['Data.Name']) else None,
             tooltip=row['Data.Name'] if not pd.isnull(row['Data.Name']) else None,
         ).add_to(test_map)
@@ -166,7 +166,6 @@ def display_map(df):
     marked with a clickable circle, providing detailed information about the test, such as its name and yield. Hover 
     over any of the markers to view more details, and click to get the specific test’s data.
     """)
-
 
 # Main Application
 st.set_page_config(page_title="Nuclear Explosions Analysis", layout="wide")
@@ -196,9 +195,8 @@ df = df[df['Data.Type'].isin(test_types)]
 st.subheader("Filtered Dataset")
 st.dataframe(df)  # [DA9] Display filtered data in a table
 
-
 # Visualizations
-st.subheader("Visualizations")
+st.subheader("Nuclear Test Visualizations")
 plot_bar_chart(df)
 plot_pie_chart(df)
 plot_line_chart(df)
