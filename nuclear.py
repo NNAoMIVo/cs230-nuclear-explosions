@@ -37,19 +37,20 @@ def load_data(file_path):
 
 # [DA1] Clean data
 def clean_data(df):
-    df.dropna(subset=['Date.Year', 'Date.Month', 'Date.Day'], inplace=True)
+    df.dropna(subset=['Date.Year', 'Date.Month', 'Date.Day'], inplace=True)  #[DA7] Drop new/group columns
     df = df[(1 <= df['Date.Month']) & (df['Date.Month'] <= 12)]
     df = df[(1 <= df['Date.Day']) & (df['Date.Day'] <= 31)]
     df['Date'] = pd.to_datetime(df['Date.Year'].astype(str) + '-' +
                                 df['Date.Month'].astype(str) + '-' +
-                                df['Date.Day'].astype(str), errors='coerce')
+                                df['Date.Day'].astype(str), errors='coerce')  # [DA9]  Add a new column or perform calculations on DataFrame columns
     df.dropna(subset=['Date'], inplace=True)
-    df['Year'] = df['Date'].dt.year
+    df['Year'] = df['Date'].dt.year   # [DA9] Perform calculations on DataFrame columns
     return df
 
 # [PY1] Function with parameters (one with default value)
 def get_top_yield_tests(df, top_n=5):
     # Get top nuclear tests by yield
+    # [DA3] Find Top largest or smallest values of a column
     return df.nlargest(top_n, 'Data.Yeild.Upper')[['Data.Name', 'Data.Yeild.Upper']]
 
 # [PY2] Function that returns multiple values
@@ -177,7 +178,7 @@ df = load_data("nuclear_explosions.csv")
 df = clean_data(df)
 
 # Sidebar filters
-countries = summarize_tests_by_country(df)  # [DA2] Summarize data by country
+countries = summarize_tests_by_country(df)
 # [ST1] Sidebar dropdown
 selected_country = st.sidebar.selectbox("Select a Country", options=["All"] + list(countries.keys()), index=0)
 # [ST2] Sidebar slider
@@ -185,7 +186,7 @@ year_range = st.sidebar.slider("Select Year Range", int(df['Year'].min()), int(d
 # [ST3] Sidebar multi-selects
 test_types = st.sidebar.multiselect("Select Test Types", options=df['Data.Type'].unique(), default=df['Data.Type'].unique())
 
-# Apply filters
+# [DA4] Filter data by one condition
 if selected_country != "All":
     df = df[df['WEAPON SOURCE COUNTRY'] == selected_country]
 df = df[df['Year'].between(year_range[0], year_range[1])]
